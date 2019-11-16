@@ -1,0 +1,7 @@
+{
+  "filter": [
+    {"subject": "((광고)})"},
+    {"label": "spam"}
+  ],
+  "token_path": "token.pickle"
+}
