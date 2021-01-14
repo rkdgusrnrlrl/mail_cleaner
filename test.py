@@ -5,9 +5,9 @@ import os.path
 import pickle
 from datetime import datetime, timedelta
 from functools import reduce
+import sys
 
 from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 # If modifying these scopes, delete the file token.pickle.
@@ -32,8 +32,8 @@ def handler(event, contaxt):
     delete_query_list2 = contaxt['filter']
 
     if not os.path.exists(credential_file_path):
-        creds = create_credential()
-        save_credeential(credential_file_path, creds)
+        print('token file is not exist')
+        sys.exit(1)
     else:
         creds = load_credential(credential_file_path)
 
@@ -59,18 +59,6 @@ def handler(event, contaxt):
             delete_thread(service, threads)
 
 
-def create_credential():
-    flow = InstalledAppFlow.from_client_secrets_file(
-        'credentials.json', SCOPES)
-    return flow.run_console()
-
-
-def save_credeential(file_path, creds):
-    with open(file_path, 'wb') as token:
-        pickle.dump(creds, token)
-    return creds
-
-
 def load_credential(file_path):
     if not os.path.exists(file_path):
         print('token file not exist')
@@ -94,6 +82,6 @@ def delete_thread(service, threads):
 
 
 if __name__ == '__main__':
-    dd = open('args.json').read()
+    dd = open('args.json', encoding='utf-8').read()
     dd = json.loads(dd)
     handler(None, dd)
